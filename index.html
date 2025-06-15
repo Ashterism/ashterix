@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashterix | Status</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #0b0c10;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    img.logo {
+      width: 120px;
+      height: auto;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #00d4ff;
+    }
+    p.tagline {
+      font-size: 0.95rem;
+      color: #aaa;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      max-width: 600px;
+      border-collapse: collapse;
+      background: #1f1f1f;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    thead {
+      background: #111;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #333;
+      font-size: 0.85rem;
+    }
+    th {
+      color: #0af;
+    }
+    td {
+      color: #eee;
+    }
+    @media (max-width: 600px) {
+      table {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      // TODO: paste your Firebase config here
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadStatus() {
+      const q = query(collection(db, "status_logs"), orderBy("timestamp", "desc"), limit(10));
+      const snapshot = await getDocs(q);
+      const table = document.querySelector("tbody");
+      table.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
+          <td>${data.battery_level ?? "-"}</td>
+          <td>${data.power_input ?? "-"}</td>
+          <td>${data.power_status ?? "-"}</td>
+          <td>${data.temperature_C ?? "-"}</td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", loadStatus);
+  </script>
+</head>
+<body>
+  <img src="/astroProfilePic.png" alt="Ashterix logo" class="logo" />
+  <h1>Ashterix | Pi Status</h1>
+  <p class="tagline">Live desert data & remote updates</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Battery</th>
+        <th>Power In</th>
+        <th>Status</th>
+        <th>Temp (C)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="5">Loading...</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

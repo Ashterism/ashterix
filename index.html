@@ -86,7 +86,7 @@
       const days = Math.floor(hrs / 24);
       return `${days}d ${hrs % 24}h ${mins % 60}m`;
     }
-    
+
     async function loadStatus() {
       const q = query(collection(db, "status_logs"), orderBy("timestamp", "desc"), limit(16));
       const snapshot = await getDocs(q);
@@ -96,7 +96,7 @@
         const data = doc.data();
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
+          <td>${data.timestamp?.slice(0,19).replace("T", " ") ?? "-"}</td>
           <td>${data.battery_level ?? "-"}</td>
           <td>${data.power_input_gpio ?? "-"}</td>
           <td>${data.power_input_usb === "PRESENT" ? "Yes" : "No"}</td>
@@ -126,8 +126,8 @@
       <tr>
         <th>Timestamp</th>
         <th>PiJuice battery</th>
-        <th>Power in (GPIO)</th>
-        <th>Power in (USB)</th>
+        <th>Solar Input (GPIO)</th>
+        <th>Mains Input (USB)</th>
         <th>PiJuice power status</th>
         <th>Battery temp</th>
         <th>Pi CPU Temp</th>

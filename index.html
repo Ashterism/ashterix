@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ashterix | Status</title>
+  <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon" />
   <style>
     body {
       margin: 0;
@@ -87,9 +88,9 @@
           <td>${data.power_status ?? "-"}</td>
           <td>${data.temperature_C ?? "-"}</td>
           <td>${data.cpu_temp_C ?? "-"}</td>
-          <td>${data.cpu_load_1min ?? "-"}</td>
-          <td>${data.cpu_load_5min ?? "-"}</td>
-          <td>${data.cpu_load_15min ?? "-"}</td>
+          <td>${data.cpu_load?.[0] ?? "-"}</td>
+          <td>${data.cpu_load?.[1] ?? "-"}</td>
+          <td>${data.cpu_load?.[2] ?? "-"}</td>
           <td>${data.uptime_minutes ?? "-"}</td>
           <td>${data.throttled ?? "-"}</td>
         `;
@@ -101,7 +102,7 @@
   </script>
 </head>
 <body>
-  <img src="/astroProfilePic.png" alt="Ashterix logo" class="logo" />
+  <img src="/astroPic.png" alt="Ashterix logo" class="logo" />
   <h1>Ashterix | Pi Status</h1>
   <p class="tagline">Live desert data & remote updates</p>
 

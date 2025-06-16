@@ -60,12 +60,18 @@
       }
     }
   </style>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
-      // TODO: paste your Firebase config here
+      apiKey: "AIzaSyCcEpYG0n2TCPV9nmsLyMX6OcHTeY1KGT4",
+      authDomain: "timelapsepi-1a9a1.firebaseapp.com",
+      projectId: "timelapsepi-1a9a1",
+      storageBucket: "timelapsepi-1a9a1.firebasestorage.app",
+      messagingSenderId: "410466156955",
+      appId: "1:410466156955:web:9ac6234d6dcbb22b01213e"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -80,7 +86,7 @@
         const data = doc.data();
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
+          <td>${data.timestamp?.slice(0, 19).replace("T", " ")}</td>
           <td>${data.battery_level ?? "-"}</td>
           <td>${data.power_input ?? "-"}</td>
           <td>${data.power_status ?? "-"}</td>
@@ -93,8 +99,9 @@
     window.addEventListener("DOMContentLoaded", loadStatus);
   </script>
 </head>
+
 <body>
-  <img src="/astroProfilePic.png" alt="Ashterix logo" class="logo" />
+  <img src="/astroPic.png" alt="Ashterix logo" class="logo" />
   <h1>Ashterix | Pi Status</h1>
   <p class="tagline">Live desert data & remote updates</p>
 

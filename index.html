@@ -100,21 +100,23 @@
       snapshot.forEach((doc) => {
         const data = doc.data();
         const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
-          <td>${data.battery_level ?? "-"}</td>
-          <td>${data.battery_temp_C ?? "-"}°C</td>
-          <td>${formatVoltage(data.battery_voltage_mV)}</td>
-          <td>${data.power_input_gpio ?? "-"}</td>
-          <td>${data.power_input_usb ?? "-"}</td>
-          <td>${data.power_status ?? "-"}</td>
-          <td>${data.cpu_temp_C ?? "-"}°C</td>
-          <td>${data.cpu_load?.[0] ?? "-"}</td>
-          <td>${data.cpu_load?.[1] ?? "-"}</td>
-          <td>${data.cpu_load?.[2] ?? "-"}</td>
-          <td>${formatUptime(data.uptime_s)}</td>
-          <td>${data.throttled ?? "-"}</td>
-        `;
+      row.innerHTML = `
+        <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
+        <td>${data.battery_level ?? "-"}</td>
+        <td>${data.battery_temp_C ?? "-"}°C</td>
+        <td>${formatVoltage(data.battery_voltage_mV)}</td>
+        <td>${data.power_input_gpio ?? "-"}</td>
+        <td>${data.gpio_voltage_V ?? "-"}</td>    
+        <td>${data.gpio_current_A ?? "-"}</td>   
+        <td>${data.power_input_usb ?? "-"}</td>
+        <td>${data.power_status ?? "-"}</td>
+        <td>${data.cpu_temp_C ?? "-"}°C</td>
+        <td>${data.cpu_load?.[0] ?? "-"}</td>
+        <td>${data.cpu_load?.[1] ?? "-"}</td>
+        <td>${data.cpu_load?.[2] ?? "-"}</td>
+        <td>${formatUptime(data.uptime_s)}</td>
+        <td>${data.throttled ?? "-"}</td>
+      `;
         table.appendChild(row);
       });
     }
@@ -135,6 +137,8 @@
         <th>Battery Temp</th>
         <th>Battery Voltage</th>
         <th>Solar (GPIO)</th>
+        <th>GPIO Voltage</th>       
+        <th>GPIO Current</th>  
         <th>Mains (USB)</th>
         <th>Battery State</th>
         <th>CPU Temp</th>

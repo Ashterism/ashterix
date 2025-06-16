@@ -46,7 +46,7 @@
       padding: 0.75rem;
       text-align: left;
       border-bottom: 1px solid #333;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
     th {
       color: #0af;
@@ -56,22 +56,17 @@
     }
     @media (max-width: 600px) {
       table {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
       }
     }
   </style>
-
+  <!-- Firebase SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCcEpYG0n2TCPV9nmsLyMX6OcHTeY1KGT4",
-      authDomain: "timelapsepi-1a9a1.firebaseapp.com",
-      projectId: "timelapsepi-1a9a1",
-      storageBucket: "timelapsepi-1a9a1.firebasestorage.app",
-      messagingSenderId: "410466156955",
-      appId: "1:410466156955:web:9ac6234d6dcbb22b01213e"
+      // TODO: add your firebase config here
     };
 
     const app = initializeApp(firebaseConfig);
@@ -86,11 +81,17 @@
         const data = doc.data();
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${data.timestamp?.slice(0, 19).replace("T", " ")}</td>
+          <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
           <td>${data.battery_level ?? "-"}</td>
           <td>${data.power_input ?? "-"}</td>
           <td>${data.power_status ?? "-"}</td>
           <td>${data.temperature_C ?? "-"}</td>
+          <td>${data.cpu_temp_C ?? "-"}</td>
+          <td>${data.cpu_load_1min ?? "-"}</td>
+          <td>${data.cpu_load_5min ?? "-"}</td>
+          <td>${data.cpu_load_15min ?? "-"}</td>
+          <td>${data.uptime_minutes ?? "-"}</td>
+          <td>${data.throttled ?? "-"}</td>
         `;
         table.appendChild(row);
       });
@@ -99,9 +100,8 @@
     window.addEventListener("DOMContentLoaded", loadStatus);
   </script>
 </head>
-
 <body>
-  <img src="/astroPic.png" alt="Ashterix logo" class="logo" />
+  <img src="/astroProfilePic.png" alt="Ashterix logo" class="logo" />
   <h1>Ashterix | Pi Status</h1>
   <p class="tagline">Live desert data & remote updates</p>
 
@@ -112,11 +112,17 @@
         <th>Battery</th>
         <th>Power In</th>
         <th>Status</th>
-        <th>Temp (C)</th>
+        <th>Battery Temp</th>
+        <th>CPU Temp</th>
+        <th>Load (1m)</th>
+        <th>Load (5m)</th>
+        <th>Load (15m)</th>
+        <th>Uptime (min)</th>
+        <th>Throttled</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td colspan="5">Loading...</td></tr>
+      <tr><td colspan="11">Loading...</td></tr>
     </tbody>
   </table>
 </body>

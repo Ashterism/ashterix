@@ -90,7 +90,8 @@
         row.innerHTML = `
           <td>${data.timestamp?.slice(0,19).replace("T", " ")}</td>
           <td>${data.battery_level ?? "-"}</td>
-          <td>${data.power_input ?? "-"}</td>
+          <td>${data.power_input_gpio ?? "-"}</td>
+          <td>${data.power_input_usb === "PRESENT" ? "Yes" : "No"}</td>
           <td>${data.power_status ?? "-"}</td>
           <td>${data.temperature_C ?? "-"}</td>
           <td>${data.cpu_temp_C ?? "-"}</td>
@@ -98,6 +99,7 @@
           <td>${data.cpu_load?.[1] ?? "-"}</td>
           <td>${data.cpu_load?.[2] ?? "-"}</td>
           <td>${data.uptime_minutes ?? "-"}</td>
+          
           <td>${data.throttled ?? "-"}</td>
         `;
         table.appendChild(row);
@@ -117,14 +119,15 @@
       <tr>
         <th>Timestamp</th>
         <th>PiJuice battery</th>
-        <th>PiJuice power in</th>
+        <th>Power in (GPIO)</th>
+        <th>Power in (USB)</th>
         <th>PiJuice power status</th>
         <th>Battery temp</th>
         <th>Pi CPU Temp</th>
         <th>Pi load (1m)</th>
         <th>Pi load (5m)</th>
         <th>Pi load (15m)</th>
-        <th>Uptime (min)</th>
+        <th>Uptime (s)</th>
         <th>Throttled</th>
       </tr>
     </thead>

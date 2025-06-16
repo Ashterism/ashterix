@@ -61,17 +61,17 @@
       }
     }
   </style>
-  
+
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-  
+
     const firebaseConfig = {
       apiKey: "AIzaSyCcEpYG0n2TCPV9nmsLyMX6OcHTeY1KGT4",
       authDomain: "timelapsepi-1a9a1.firebaseapp.com",
       projectId: "timelapsepi-1a9a1",
-      storageBucket: "timelapsepi-1a9a1.firebasestorage.app",
+      storageBucket: "timelapsepi-1a9a1.appspot.com",
       messagingSenderId: "410466156955",
       appId: "1:410466156955:web:9ac6234d6dcbb22b01213e"
     };
@@ -92,14 +92,13 @@
           <td>${data.battery_level ?? "-"}</td>
           <td>${data.power_input_gpio ?? "-"}</td>
           <td>${data.power_input_usb === "PRESENT" ? "Yes" : "No"}</td>
-          <td>${data.power_status ?? "-"}</td>
+          <td>${data.power_status === "Not managed by PiJuice" ? "Not managing" : (data.power_status ?? "-")}</td>
           <td>${data.temperature_C ?? "-"}</td>
           <td>${data.cpu_temp_C ?? "-"}</td>
           <td>${data.cpu_load?.[0] ?? "-"}</td>
           <td>${data.cpu_load?.[1] ?? "-"}</td>
           <td>${data.cpu_load?.[2] ?? "-"}</td>
-          <td>${data.uptime_minutes ?? "-"}</td>
-          
+          <td>${data.uptime_s ?? "-"}</td>
           <td>${data.throttled ?? "-"}</td>
         `;
         table.appendChild(row);
@@ -132,7 +131,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td colspan="11">Loading...</td></tr>
+      <tr><td colspan="12">Loading...</td></tr>
     </tbody>
   </table>
 </body>

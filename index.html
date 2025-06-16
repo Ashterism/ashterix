@@ -98,7 +98,7 @@
           <td>${data.cpu_load?.[0] ?? "-"}</td>
           <td>${data.cpu_load?.[1] ?? "-"}</td>
           <td>${data.cpu_load?.[2] ?? "-"}</td>
-          <td>${data.uptime_s ?? "-"}</td>
+          <td>${data.uptime_str ?? "-"}</td>
           <td>${data.throttled ?? "-"}</td>
         `;
         table.appendChild(row);
@@ -126,7 +126,7 @@
         <th>Pi load (1m)</th>
         <th>Pi load (5m)</th>
         <th>Pi load (15m)</th>
-        <th>Uptime (s)</th>
+        <th>Uptime</th>
         <th>Throttled</th>
       </tr>
     </thead>

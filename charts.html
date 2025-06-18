@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashterix | Battery & Solar Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcEpYG0n2TCPV9nmsLyMX6OcHTeY1KGT4",
+      authDomain: "timelapsepi-1a9a1.firebaseapp.com",
+      projectId: "timelapsepi-1a9a1",
+      storageBucket: "timelapsepi-1a9a1.appspot.com",
+      messagingSenderId: "410466156955",
+      appId: "1:410466156955:web:9ac6234d6dcbb22b01213e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadChartData() {
+      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const q = query(
+        collection(db, "status_logs"),
+        where("timestamp", ">=", cutoff),
+        orderBy("timestamp")
+      );
+
+      const snapshot = await getDocs(q);
+      const timestamps = [], battery = [], solar = [];
+
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        timestamps.push(d.timestamp);
+        battery.push(d.battery_voltage_mV ? d.battery_voltage_mV / 1000 : null);
+        const isSolar = (d.power_input_gpio === "PRESENT" || d.power_status?.includes("CHARGING"));
+        solar.push(isSolar);
+      });
+
+      const ctx = document.getElementById("batteryChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: timestamps,
+          datasets: [{
+            label: "Battery Voltage (V)",
+            data: battery,
+            borderColor: "#00d4ff",
+            pointBackgroundColor: solar.map(s => s ? "yellow" : "#00d4ff"),
+            tension: 0.3,
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              type: "time",
+              time: {
+                unit: "hour"
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Voltage (V)"
+              },
+              suggestedMin: 3.6,
+              suggestedMax: 4.3
+            }
+          },
+          plugins: {
+            legend: {
+              display: true
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}V` + (solar[ctx.dataIndex] ? " (Solar)" : "")
+              }
+            }
+          }
+        }
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", loadChartData);
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0b0c10;
+      color: #eee;
+      text-align: center;
+      padding: 2rem;
+    }
+    canvas {
+      max-width: 1000px;
+      width: 100%;
+      background: #1f1f1f;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    h1 {
+      color: #00d4ff;
+      margin-bottom: 1rem;
+    }
+    p.tagline {
+      color: #aaa;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ashterix | Battery & Solar Chart</h1>
+  <p class="tagline">Past 24 Hours – Solar periods highlighted in yellow</p>
+  <canvas id="batteryChart"></canvas>
+</body>
+</html>
